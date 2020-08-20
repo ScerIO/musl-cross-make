@@ -4,7 +4,7 @@ SOURCES = sources
 CONFIG_SUB_REV = 3d5db9ebe860
 BINUTILS_VER = 2.33.1
 GCC_VER = 9.2.0
-MUSL_VER = 1.2.0
+MUSL_VER = 1.2.1
 GMP_VER = 6.1.2
 MPC_VER = 1.1.0
 MPFR_VER = 4.0.2
@@ -136,7 +136,7 @@ musl-git-%:
 	mkdir $@.tmp
 	( cd $@.tmp && $(COWPATCH) -I ../$< )
 	test ! -d patches/$@ || cat patches/$@/* | ( cd $@.tmp && $(COWPATCH) -p1 )
-	test ! -f $</config.sub || ( rm -f $@.tmp/config.sub && cp -f $(SOURCES)/config.sub $@.tmp/ && chmod +x $@.tmp/config.sub )
+	if test -f $</configfsf.sub ; then cs=configfsf.sub ; elif test -f $</config.sub ; then cs=config.sub ; else exit 0 ; fi ; rm -f $@.tmp/$$cs && cp -f $(SOURCES)/config.sub $@.tmp/$$cs && chmod +x $@.tmp/$$cs
 	rm -rf $@
 	mv $@.tmp $@
 
